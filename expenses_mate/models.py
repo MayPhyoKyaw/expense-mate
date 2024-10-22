@@ -2,6 +2,11 @@ from django.db import models
 
 
 class User(models.Model):
+    class Meta:
+        db_table = "User"
+        verbose_name = "ユーザー"
+        verbose_name_plural = "ユーザー"
+
     user_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
     email = models.EmailField(max_length=255)
@@ -12,6 +17,11 @@ class User(models.Model):
 
 
 class ExpenseGroup(models.Model):
+    class Meta:
+        db_table = "ExpenseGroup"
+        verbose_name = "費用"
+        verbose_name_plural = "費用"
+
     group_id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=100)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -22,6 +32,11 @@ class ExpenseGroup(models.Model):
 
 
 class GroupUser(models.Model):
+    class Meta:
+        db_table = "GroupUser"
+        verbose_name = "グループユーザー"
+        verbose_name_plural = "グループユーザー"
+
     group_user_id = models.AutoField(primary_key=True)
     group_id = models.ForeignKey(ExpenseGroup, on_delete=models.CASCADE)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -31,6 +46,11 @@ class GroupUser(models.Model):
 
 
 class Expense(models.Model):
+    class Meta:
+        db_table = "Expense"
+        verbose_name = "支出グループ"
+        verbose_name_plural = "支出グループ"
+
     expense_id = models.AutoField(primary_key=True)
     group_id = models.ForeignKey(ExpenseGroup, on_delete=models.CASCADE)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -45,6 +65,11 @@ class Expense(models.Model):
 
 
 class Balance(models.Model):
+    class Meta:
+        db_table = "Balance"
+        verbose_name = "精算状況"
+        verbose_name_plural = "精算状況"
+
     balance_id = models.AutoField(primary_key=True)
     group_id = models.ForeignKey(ExpenseGroup, on_delete=models.CASCADE)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
