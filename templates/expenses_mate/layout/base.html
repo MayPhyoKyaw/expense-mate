@@ -8,15 +8,37 @@
   <link rel="icon" type="image/png" href="{% static 'images/favicon.ico' %}">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Your site description here.">
-  
+
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css"
     integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
-  
+
   <link href="{% static 'css/style.css' %}" rel="stylesheet">
 </head>
 
 <body>
+  <nav class="shadow-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <img src="{% static 'images/expenses_mate_icon.png' %}" alt="Logo" width="60px">
+        </div>
+        <div class="flex items-center">
+          <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+            <a href="#" class="text-black-500 inline-flex items-center px-1 pt-1 text-sm font-medium hover:text-gray-700">
+              {{ user.username }} <i class="fa fa-user ml-2 mr-5"></i> 
+            </a>
+          </div>
+          <div class="flex-shrink-0">
+            <a href="{% url 'account_logout' %}"
+              class="text-black-500 inline-flex items-center px-1 pt-1 ml-5 text-sm font-medium hover:text-gray-700">
+              Logout <i class="fas fa-sign-out-alt ml-2"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
 
   <div class="header-block">
     <img src="{% static 'images/expenses_mate_icon.png' %}" width="100px" style="margin-right: 10px;" />
@@ -28,10 +50,10 @@
   <section class="vh-100 ">
     <div class="flex justify-center">
       {% block contents%}
-        <!-- ここに個別のテンプレートの内容が組み込まれる-->
+      <!-- ここに個別のテンプレートの内容が組み込まれる-->
       {% endblock %}
     </div>
-    
+
   </section>
 
 </body>
