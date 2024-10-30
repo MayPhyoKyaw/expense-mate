@@ -1,0 +1,45 @@
+{% extends './layout/base.html' %}
+{% load static %}
+{% load i18n %} 
+
+{% block contents %}
+
+<div class="container">
+    <div class="login-form">
+        <div class="login-form-fields">
+            <div class="login-input-group">
+                <div class="name-password-login-button">
+
+                    <div class="logo-icon">
+                        <img src="{% static 'images/expenses_mate_icon.png' %}" />
+                    </div>
+
+                    <form method="post" action="{% url 'account_login' %}">
+                        {% csrf_token %}
+                        <div class="name">
+                            <i class="fa fa-envelope"></i>
+                            <input type="email" name="login" id="login" placeholder="メールアドレス" required>
+                        </div>
+
+                        <div class="password">
+                            <i class="fa-solid fa-lock"></i>
+                            <input type="password" name="password" id="password" placeholder="パスワード" required>
+                        </div>
+
+                        <div class="login-btn">
+                            <button type="submit">{% trans "ログイン" %}</button>
+                        </div>
+                    </form>
+
+                    <div class="forget-password-sign-up-container">
+                        <div class="forget-password"><a href="{% url 'account_reset_password' %}">{% trans "パスワードをお忘れの方" %}</a></div>
+                        <div class="sign-up"><a href="{% url 'account_signup' %}">{% trans "サインアップ" %}</a></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

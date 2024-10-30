@@ -1,18 +1,19 @@
-from django.contrib import admin
-from .models import User, ExpenseGroup, Expense, GroupUser, Balance
+from django.contrib import admin # type: ignore
+from .models import User, ExpenseGroup, Expense, Balance
 
 
 # Register your models here.
 class UsersAdmin(admin.ModelAdmin):
-    list_display = ('user_id', 'name', 'email', 'password_hash')
+    list_display = ('user_id', 'username', 'email', 'password')
 
 
 class ExpenseGroupsAdmin(admin.ModelAdmin):
     list_display = ('group_id', 'title', 'created_by', 'created_at')
+    filter_horizontal = ('shared_with',)
 
 
-class GroupUsersAdmin(admin.ModelAdmin):
-    list_display = ('group_user_id', 'group_id', 'user_id')
+# class GroupUsersAdmin(admin.ModelAdmin):
+#     list_display = ('group_user_id', 'group_id', 'user_id')
 
 
 class ExpensesAdmin(admin.ModelAdmin):
@@ -25,6 +26,6 @@ class BalancesAdmin(admin.ModelAdmin):
 
 admin.site.register(User, UsersAdmin)
 admin.site.register(ExpenseGroup, ExpenseGroupsAdmin)
-admin.site.register(GroupUser, GroupUsersAdmin)
+# admin.site.register(GroupUser, GroupUsersAdmin)
 admin.site.register(Expense, ExpensesAdmin)
 admin.site.register(Balance, BalancesAdmin)
