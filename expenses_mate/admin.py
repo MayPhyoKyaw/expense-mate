@@ -1,5 +1,5 @@
 from django.contrib import admin # type: ignore
-from .models import User, ExpenseGroup, Expense, Balance
+from .models import User, ExpenseGroup, Expense
 
 
 # Register your models here.
@@ -17,15 +17,15 @@ class ExpenseGroupsAdmin(admin.ModelAdmin):
 
 
 class ExpensesAdmin(admin.ModelAdmin):
-    list_display = ('expense_id', 'group_id', 'user_id', 'item_name', 'amount', 'transaction_type')
+    list_display = ('expense_id', 'group_id', 'user_id', 'item_name', 'amount')
 
 
-class BalancesAdmin(admin.ModelAdmin):
-    list_display = ('balance_id', 'group_id', 'user_id', 'balance_amount', 'last_updated')
+# class BalancesAdmin(admin.ModelAdmin):
+#     list_display = ('balance_id', 'group_id', 'user_id', 'balance_amount', 'last_updated')
 
 
 admin.site.register(User, UsersAdmin)
 admin.site.register(ExpenseGroup, ExpenseGroupsAdmin)
 # admin.site.register(GroupUser, GroupUsersAdmin)
 admin.site.register(Expense, ExpensesAdmin)
-admin.site.register(Balance, BalancesAdmin)
+# admin.site.register(Balance, BalancesAdmin)

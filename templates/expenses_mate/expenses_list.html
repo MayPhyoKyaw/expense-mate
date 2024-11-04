@@ -1,9 +1,125 @@
 {% extends './layout/base.html' %}
+{% load humanize %}
+{% load custom_tags %}
 
 {% block contents %}
 
-<div>
-    Expenses Page
+<div class="mx-auto w-full md:w-3/4 px-4 mt-1.5">
+  <form method="POST" action="{% url 'expenses_mate:expenses_list_create' %}">
+    {% csrf_token %}
+    <div class="list-input-block">
+      {{ form.title|add_class:"expenses-list-input" }}
+      <label for="input__username" class="floating-label">新しい支出リストを追加</label>
+      <span class="border-animation"></span>
+      <button type="submit" class="add-button">+</button>
+    </div>
+  </form>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
+
+    {% for expense_card in expenses_group %}
+    <div class="card">
+
+      <div class="flex justify-between">
+        <div class="card-title">
+          <h2 class="title">{{ expense_card.title }}</h2>
+          <!-- <span class="badge">{{ expense_card.transaction_type }}</span> -->
+        </div>
+        <div>
+          <div class="dropdown-container" tabindex="-1">
+            <div class="three-dots"></div>
+            <div class="dropdown">
+              <a href="#">
+                <div class="edit-icon"><i class="fas fa-edit mr-1"></i> 編集</div>
+              </a>
+              <hr />
+              <!-- <a href="#">
+                <div class="delete-icon"><i class="fas fa-trash-alt mr-1"></i> 削除</div>
+              </a> -->
+              <form method="post" action="{% url 'expenses_mate:expenses_list_create' %}">
+                {% csrf_token %}
+                <input type="hidden" name="delete_id" value="{{ expense_card.group_id }}">
+                <button type="submit" class="delete-icon"><i class="fas fa-trash-alt mr-1"></i> 削除</button>
+              </form>
+              <hr />
+              <!-- <a href="#" data-toggle="modal" data-target="#shareModal{{ expense_card.group_id }}">
+                <div class="share-icon"><i class="fas fa-share"></i> 共有</div>
+              </a> -->
+              <a href="#" @click.prevent="open = true">
+                <div class="share-icon cursor-pointer">
+                  <i class="fas fa-share"></i> 共有
+                </div>
+              </a>
+              <div x-show="open" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center"
+                style="display: none;">
+                <div class="bg-white rounded-lg shadow-lg w-1/3 p-6">
+                  <div class="flex justify-between items-center">
+                    <h5 class="text-lg font-semibold">共有するユーザーを選択</h5>
+                    <button @click="open = false" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="mt-4">
+                    <form method="POST" action="{% url 'expenses_mate:share_expense_group' expense_card.group_id %}">
+                      {% csrf_token %}
+                      <div class="form-group">
+                        <label for="users" class="block text-sm font-medium text-gray-700">ユーザーを選択</label>
+                        <select name="shared_with" id="users" multiple
+                          class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300 focus:border-blue-500">
+                          {% for user in all_users %}
+                          <option value="{{ user.id }}">{{ user.username }}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                      <div class="flex justify-end mt-6">
+                        <button type="button" @click="open = false"
+                          class="bg-gray-300 text-gray-700 px-4 py-2 rounded mr-2">閉じる</button>
+                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">共有</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-between items-end mt-5">
+        <div>
+          <div class="info">
+            <span class="info-title">作成者：</span>
+            <span class="info-title">{{ expense_card.created_by }}</span>
+          </div>
+          <div class="info">
+            <span class="info-title">総支出額：</span>
+            <span class="info-value">{{ expense_card.total_expense|default:0|intcomma }}</span>
+          </div>
+          <div class="info">
+            <span class="info-title">共有ユーザー：</span>
+            <span class="info-value">{{ expense_card.shared_with.all|join:", " }}</span>
+          </div>
+          <div class="info">
+            <span class="info-title">作成日：</span>
+            <span class="info-value">{{ expense_card.created_at|date:"Y年n月j日 H:i" }}</span>
+          </div>
+        </div>
+        <a href="{% url 'expenses_mate:expense_detail' expense_card.group_id %}" class="detail-btn card-btn ">
+          <span class="detail-btn-text">詳細</span>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
+            class="icon">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+          </svg>
+        </a>
+      </div>
+    </div>
+    {% empty %}
+    <p>No expenses found.</p>
+    {% endfor %}
+  </div>
+
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/alpinejs" defer></script>
 
 {% endblock %}

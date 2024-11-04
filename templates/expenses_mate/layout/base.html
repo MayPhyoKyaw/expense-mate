@@ -20,27 +20,40 @@
   <nav class="shadow-md sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between h-16">
+        <!-- Logo - always visible -->
         <div class="flex items-center">
-          <img src="{% static 'images/expenses_mate_icon.png' %}" alt="Logo" width="60px">
+          <a href="{% url 'expenses_mate:expenses_list_create' %}">
+            <img src="{% static 'images/expenses_mate_icon.png' %}" alt="Logo" width="60px">
+          </a>
         </div>
-        <div class="flex items-center">
-          <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
-            <a href="#" class="text-black-500 inline-flex items-center px-1 pt-1 text-sm font-medium hover:text-gray-700">
-              {{ user.username }} <i class="fa fa-user ml-2 mr-5"></i> 
-            </a>
-          </div>
-          <div class="flex-shrink-0">
-            <a href="{% url 'account_logout' %}"
-              class="text-black-500 inline-flex items-center px-1 pt-1 ml-5 text-sm font-medium hover:text-gray-700">
-              Logout <i class="fas fa-sign-out-alt ml-2"></i>
-            </a>
-          </div>
+
+        <!-- Profile and Logout icons -->
+        <div class="flex items-center space-x-4">
+          <!-- User profile icon with text hidden on small screens -->
+          <a href="#" class="inline-flex items-center px-5 pt-1 text-2xl text-black-500 md:text-sm font-medium hover:text-gray-700">
+            <i class="fa fa-user"></i>
+            <span class="hidden md:inline ml-2">{{ user.username }}</span>
+          </a>
+
+          <!-- Logout icon with text hidden on small screens -->
+          <a href="{% url 'account_logout' %}"
+            class="inline-flex items-center px-2 pt-1 text-2xl text-black-500 md:text-sm font-medium hover:text-gray-700">
+            <i class="fas fa-sign-out-alt"></i>
+            <span class="hidden md:inline ml-2">Logout</span>
+          </a>
         </div>
       </div>
     </div>
   </nav>
 
-  <div class="header-block">
+  <div class="relative">
+    {% if request.path != '/' %}
+    <a href="{% url 'expenses_mate:expenses_list_create' %}">
+      <button class="back-to-home absolute left-10 top-7 lg:left-28">戻す</button>
+    </a>
+    {% endif %}
+  </div>
+  <div class="header-block flex items-center justify-center text-center">
     <img src="{% static 'images/expenses_mate_icon.png' %}" width="100px" style="margin-right: 10px;" />
     <!-- <h1 class="header"><span class="japanese-text">コストメイト</span>｜Expense Mate</h1> -->
     <h1 class="text-center header">コストメイト｜ExpenseMate</h1>

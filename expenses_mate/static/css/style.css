@@ -14,11 +14,7 @@ body {
 }
 
 .header-block {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  margin-top: 3rem;
+  margin-top: 1rem;
   margin-bottom: 1rem;
 }
 
@@ -120,6 +116,13 @@ h1.header {
   position: relative;
 }
 
+/* .list-input-block form {
+  display: flex;
+  align-items: center;
+  width: 100%;
+} */
+
+
 .expenses-list-input {
   position: relative;
   flex: 1;
@@ -144,7 +147,7 @@ h1.header {
   z-index: 1;
 }
 
-.expenses-list-input:focus ~ .border-animation {
+.expenses-list-input:focus~.border-animation {
   transform: scaleX(1);
   background-color: #2BC0E4;
 }
@@ -160,8 +163,8 @@ h1.header {
 }
 
 /* Apply floating effect on focus or when input has content */
-.expenses-list-input:focus + .floating-label,
-.expenses-list-input:not(:placeholder-shown) + .floating-label {
+.expenses-list-input:focus+.floating-label,
+.expenses-list-input:not(:placeholder-shown)+.floating-label {
   transform: translateY(-1.5rem);
   font-size: 1rem;
   color: #37a2d3;
@@ -180,9 +183,10 @@ h1.header {
 }
 
 .add-button:hover {
-  background-color: #2a90b8; 
+  background-color: #2a90b8;
   transform: scale(1.05);
 }
+
 /* input text box design end */
 
 /* Card Design Start */
@@ -226,30 +230,61 @@ h1.header {
   margin-left: 10px;
   font-style: italic;
 }
+
 /* Card Design End */
 
 /* Detail button design start */
-.detail-btn {
+.card-btn {
   display: inline-flex;
   height: 50px;
   align-items: center;
   padding: 0 20px;
   font-weight: 600;
   font-size: 0.875rem;
-  color: #37a2d3;
-  background-color: #f6f8dc;
+  /* color: #37a2d3;
+  background-color: #f6f8dc; */
   border-radius: 0.375rem;
   text-decoration: none;
   position: relative;
   overflow: hidden;
   transition: color 0.2s ease-in-out;
+  /* border-bottom: 5px solid #37a2d3; */
+}
+
+.detail-btn {
+  color: #37a2d3;
+  background-color: #dcf8f2;
   border-bottom: 5px solid #37a2d3;
 }
 
 .detail-btn:hover {
   color: #ffffff;
   background-color: #37a2d3;
-  border-bottom: 5px solid #f2f990;
+  border-bottom: 5px solid #dcf8f2;
+}
+
+.edit-btn {
+  color: #ffae00;
+  background-color: #fff0d1;
+  border-bottom: 5px solid #ffae00;
+}
+
+.edit-btn:hover {
+  color: #fff;
+  background-color: #ffae00;
+  border-bottom: 5px solid #fff0d1;
+}
+
+.delete-btn {
+  color: #ec2f2f;
+  background-color: #fccaca;
+  border-bottom: 5px solid #ec2f2f;
+}
+
+.delete-btn:hover {
+  color: #ffffff;
+  background-color: #ec2f2f;
+  border-bottom: 5px solid #fccaca;
 }
 
 .icon {
@@ -264,6 +299,7 @@ h1.header {
 .detail-btn-text {
   margin-right: 0.5rem;
 }
+
 /* Detail button design end */
 
 /* Login Page Start */
@@ -294,11 +330,9 @@ h1.header {
 
 /* Login form field container */
 .login-form-fields {
-  background: linear-gradient(
-    90deg,
-    rgba(110, 223, 155, 0.4430147058823529) 0%,
-    rgba(130, 211, 232, 0.6250875350140056) 43%
-  );
+  background: linear-gradient(90deg,
+      rgba(110, 223, 155, 0.4430147058823529) 0%,
+      rgba(130, 211, 232, 0.6250875350140056) 43%);
   position: absolute;
   width: 500px;
   height: 500px;
@@ -351,6 +385,7 @@ h1.header {
   font-size: 1rem;
   width: 100%;
 }
+
 .name input:focus,
 .password input:focus {
   border: none;
@@ -403,6 +438,7 @@ h1.header {
   position: absolute;
   left: 10%;
 }
+
 .forget-password a {
   color: rgb(41, 41, 82);
   font-size: 1rem;
@@ -437,7 +473,197 @@ h1.header {
 .sign-up a:hover {
   background-color: rgba(0, 162, 255, 0.5);
 }
+
 /* Login Page End */
+
+/* Expenses title in detail start */
+.expenses-title {
+  font-size: 2rem;
+  font-weight: bolder;
+  /* text-align: center; */
+  color: #1396d2;
+  margin-bottom: 1.5rem;
+}
+
+/* Expenses title in detail end  */
+
+/* Back to home button start */
+.back-to-home {
+  background: #efefef;
+  background-image: linear-gradient(white, #ccc);
+  border: none;
+  border-radius: 0 0.5rem 0.5rem 0;
+  color: #4d4d4d;
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  height: 30px;
+  line-height: 1;
+  padding: 0.6rem 2rem 0.6rem 1rem;
+  position: relative;
+  text-shadow: 0 1px 0 white;
+  box-shadow: inset 0 2px 0 0 rgba(0, 0, 0, 0.3), inset -2px 0 0 0 rgba(0, 0, 0, 0.3), inset 0 -2px 0 0 rgba(0, 0, 0, 0.3), inset 0 3px 0 0 white, 0 3px 3px -3px rgba(0, 0, 0, 0.24), 0 6px 6px -6px rgba(0, 0, 0, 0.12);
+}
+
+.back-to-home:before {
+  background: #efefef;
+  background-image: linear-gradient(135deg, white, #ccc);
+  border-radius: 0.5rem;
+  bottom: 1.5px;
+  content: "";
+  height: 27px;
+  left: -10px;
+  position: absolute;
+  transform: rotate(45deg);
+  width: 25px;
+  z-index: -1;
+  box-shadow: inset 2px 0 0 0 rgba(0, 0, 0, 0.3), inset 0 -2px 0 0 rgba(0, 0, 0, 0.3), inset 3px 0 0 0 white, 0 3px 3px -3px rgba(0, 0, 0, 0.24), 0 6px 6px -6px rgba(0, 0, 0, 0.12);
+}
+
+.back-to-home:hover,
+.back-to-home:focus {
+  outline: none;
+  background-image: linear-gradient(white, #ddd);
+  box-shadow: inset 0 2px 0 0 rgba(0, 162, 255, 0.5), inset -2px 0 0 0 rgba(0, 162, 255, 0.5), inset 0 -2px 0 0 rgba(0, 162, 255, 0.5), inset 0 3px 0 0 white, 0 6px 6px -6px rgba(0, 0, 0, 0.12), 0 9px 9px -9px rgba(0, 0, 0, 0.06);
+}
+
+.back-to-home:hover:before,
+.back-to-home:focus:before {
+  background-image: linear-gradient(130deg, white, #ddd);
+  box-shadow: inset 2px 0 0 0 rgba(0, 162, 255, 0.5), inset 0 -2px 0 0 rgba(0, 162, 255, 0.5), inset 3px 0 0 0 white, 0 6px 6px -6px rgba(0, 0, 0, 0.12), 0 9px 9px -9px rgba(0, 0, 0, 0.06);
+}
+
+.back-to-home:active {
+  background-image: linear-gradient(#ccc, #eee);
+  box-shadow: inset 0 2px 0 0 rgba(0, 162, 255, 0.5), inset -2px 0 0 0 rgba(0, 162, 255, 0.5), inset 0 -2px 0 0 rgba(0, 162, 255, 0.5), inset 0 3px 3px -3px rgba(0, 0, 0, 0.3);
+}
+
+.back-to-home:active:before {
+  background-image: linear-gradient(130deg, #ccc, #eee);
+  box-shadow: inset 2px 0 0 0 rgba(0, 162, 255, 0.5), inset 0 -2px 0 0 rgba(0, 162, 255, 0.5), inset 3px 0 3px -3px rgba(0, 0, 0, 0.3);
+}
+
+/* Back to home button end */
+
+/* Expenses table block start */
+.expenses-table-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #00699a;
+}
+
+.expenses-table {
+  border: 1px #a39485 solid;
+  font-size: .9em;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, .25);
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.expenses-table th {
+  text-align: left;
+  height: 4rem;
+}
+
+.expenses-table-icon {
+  font-size: 2.5rem;
+  color: #929292;
+  text-align: center;
+}
+
+.expenses-table thead {
+  font-weight: bold;
+  color: #fff;
+  background: #d2e6cb;
+  color: #00699a;
+}
+
+.expenses-table td { 
+  padding: 0.1rem 0.3rem;
+  vertical-align: middle;
+  height: 4rem;
+}
+
+.expenses-table th {
+  padding: 1rem 0.5rem;
+  vertical-align: middle;
+}
+
+.expenses-table td {
+  border-bottom: 1px solid rgba(0, 0, 0, .1);
+  background: #fff;
+}
+
+.expenses-table a {
+  color: #73685d;
+}
+
+/* Expenses table block end */
+
+/* Three dot menu start */
+.three-dots:after {
+  cursor: pointer;
+  color: #00699a;
+  content: '\2807';
+  font-size: 2rem;
+  padding: 0 5px;
+}
+
+/* .dropdown-container a {
+  text-decoration: none;
+  color: #00699a;
+} */
+
+.edit-icon {
+  color: rgb(235, 141, 0);
+  font-size: 1rem;
+  padding: 1rem;
+}
+
+.delete-icon {
+  color: rgb(227, 15, 0);
+  font-size: 1rem;
+  padding: 1rem;
+}
+
+.share-icon {
+  color: rgb(79, 207, 0);
+  font-size: 1rem;
+  padding: 1rem;
+}
+
+.dropdown {
+  position: absolute;
+  background-color: #d2e6cb;
+  box-shadow: 0px 0px 3px 3px #d2e6cb;
+  outline: none;
+  opacity: 0;
+  z-index: -1;
+  max-height: 0;
+  transition: opacity 0.1s, z-index 0.1s, max-height 0.5s;
+}
+
+.dropdown-container:focus {
+  outline: none;
+}
+
+.dropdown-container:focus .dropdown {
+  opacity: 1;
+  z-index: 100;
+  max-height: 100vh;
+  transition: opacity 0.2s, z-index 0.2s, max-height 0.5s;
+}
+/* Three dot menu end */
+
+/* Expenses user info title start */
+.expenses-user-info-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #00699a;
+}
+/* Expenses user info title end */
 
 /* Media Query Start */
 @media (max-width: 768px) {
@@ -451,4 +677,5 @@ h1.header {
     margin: 10px;
   }
 }
+
 /* Media Query End */

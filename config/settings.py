@@ -118,13 +118,10 @@ STATIC_URL = "static/"
 
 SITE_ID =1
 
-# LOGIN_REDIRECT_URL = reverse_lazy("expenses_mate:expense_group_list")
-LOGIN_REDIRECT_URL = 'expenses_mate:expense_group_list'
-# LOGIN_REDIRECT_URL = 'expenses_mate:expenses_list'
+LOGIN_REDIRECT_URL = 'expenses_mate:expenses_list_create'
 LOGOUT_REDIRECT_URL = 'account_login'
 ACCOUNT_LOGOUT_REDIRECT_URL = 'account_login'
-# LOGIN_URL = 'account_login'
-ACCOUNT_LOGOUT_ON_GET = True  # This ensures that logout works with GET requests
+ACCOUNT_LOGOUT_ON_GET = True 
 ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = True
 
 # Default primary key field type
