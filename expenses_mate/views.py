@@ -19,11 +19,12 @@ class ExpenseGroupListCreateView(LoginRequiredMixin, View):
         ).select_related('created_by').annotate(
             total_expense=Sum('expense__amount', output_field=models.DecimalField())
         )
-
+        all_users = User.objects.all()
         form = ExpenseGroupForm()
         context = {
             'expenses_group': expense_groups,
             'form': form,
+            'all_users': all_users
         }
         return render(request, self.template_name, context)
 
@@ -39,6 +40,7 @@ class ExpenseGroupListCreateView(LoginRequiredMixin, View):
             expense_group = form.save(commit=False)
             expense_group.created_by = request.user
             expense_group.save()
+            form.save_m2m() 
             return redirect('expenses_mate:expenses_list_create') 
         
         expense_groups = ExpenseGroup.objects.filter(
@@ -46,9 +48,11 @@ class ExpenseGroupListCreateView(LoginRequiredMixin, View):
         ).select_related('created_by').annotate(
             total_expense=Sum('expense__amount', output_field=models.DecimalField())
         )
+        all_users = User.objects.all()
         context = {
             'expenses_group': expense_groups,
             'form': form,
+            'all_users': all_users,
         }
         return render(request, self.template_name, context)
 
@@ -161,18 +165,23 @@ class ExpenseManageView(LoginRequiredMixin, FormView, ListView):
             else:
                 return self.form_invalid(form)
         return redirect(self.get_success_url())
-
-class ShareExpenseGroupView(LoginRequiredMixin, View):
-    def post(self, request, group_id):
-        expense_group = get_object_or_404(ExpenseGroup, group_id=group_id, created_by=request.user)
-        shared_user_ids = request.POST.getlist('shared_with')
-        if shared_user_ids:
-            for user_id in shared_user_ids:
-                user = User.objects.get(id=user_id)
-                expense_group.shared_with.add(user)
-            messages.success(request, 'Expense group shared successfully.')
-        else:
-            messages.warning(request, 'No users selected to share with.')
-
-        return redirect('expenses_mate:expenses_list_create')
     
+
+class ShareExpenseGroupView(View):
+    def post(self, request, *args, **kwargs):
+        expense_group = get_object_or_404(ExpenseGroup, group_id=kwargs['group_id'])
+        
+        form = ExpenseGroupForm(request.POST, instance=expense_group)
+        
+        if form.is_valid():
+            expense_group = form.save()
+            print("Form saved successfully with shared_with:", form.cleaned_data['shared_with'])
+            return redirect('expenses_mate:expenses_list_create')
+        else:
+            print("Form errors:", form.errors)
+            expenses = expense_group.expense_set.all()
+            return render(request, 'expenses_mate/expenses_list.html', {
+                'form': form,
+                'expense_group': expense_group,
+                'expenses': expenses
+            })

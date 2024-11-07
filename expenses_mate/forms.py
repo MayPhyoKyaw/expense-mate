@@ -1,14 +1,23 @@
 from django import forms # type: ignore
-from .models import ExpenseGroup, Expense
+from .models import ExpenseGroup, Expense, User
 
 
 class ExpenseGroupForm(forms.ModelForm):
     """
     新規データ登録画面用のフォーム定義
     """
+    shared_with = forms.ModelMultipleChoiceField(
+        queryset=User.objects.all(),  # You can filter if necessary
+        widget=forms.SelectMultiple(attrs={
+            'class': 'expenses-list-input',
+            'id': 'input__shared_with'
+        }),
+        required=False  # Makes this field optional
+    )
+    
     class Meta:
         model = ExpenseGroup
-        fields =['title']
+        fields =['title', 'shared_with']
         
     def __init__(self, *args, **kwargs):
         super(ExpenseGroupForm, self).__init__(*args, **kwargs)

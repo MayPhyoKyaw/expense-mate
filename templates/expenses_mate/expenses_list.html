@@ -20,72 +20,79 @@
     {% for expense_card in expenses_group %}
     <div class="card">
 
-      <div class="flex justify-between">
-        <div class="card-title">
-          <h2 class="title">{{ expense_card.title }}</h2>
+      <div class="flex justify-between items-center">
+        <div class="card-title flex items-center space-x-2">
+          <h2 class="title mt-4">{{ expense_card.title }}</h2>
           <!-- <span class="badge">{{ expense_card.transaction_type }}</span> -->
         </div>
         <div>
-          <div class="dropdown-container" tabindex="-1">
-            <div class="three-dots"></div>
-            <div class="dropdown">
-              <a href="#">
-                <div class="edit-icon"><i class="fas fa-edit mr-1"></i> 編集</div>
-              </a>
-              <hr />
-              <!-- <a href="#">
-                <div class="delete-icon"><i class="fas fa-trash-alt mr-1"></i> 削除</div>
-              </a> -->
-              <form method="post" action="{% url 'expenses_mate:expenses_list_create' %}">
-                {% csrf_token %}
-                <input type="hidden" name="delete_id" value="{{ expense_card.group_id }}">
-                <button type="submit" class="delete-icon"><i class="fas fa-trash-alt mr-1"></i> 削除</button>
-              </form>
-              <hr />
-              <!-- <a href="#" data-toggle="modal" data-target="#shareModal{{ expense_card.group_id }}">
-                <div class="share-icon"><i class="fas fa-share"></i> 共有</div>
-              </a> -->
-              <a href="#" @click.prevent="open = true">
-                <div class="share-icon cursor-pointer">
-                  <i class="fas fa-share"></i> 共有
-                </div>
-              </a>
-              <div x-show="open" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center"
-                style="display: none;">
-                <div class="bg-white rounded-lg shadow-lg w-1/3 p-6">
-                  <div class="flex justify-between items-center">
-                    <h5 class="text-lg font-semibold">共有するユーザーを選択</h5>
-                    <button @click="open = false" class="text-gray-500 hover:text-gray-700 focus:outline-none">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="mt-4">
-                    <form method="POST" action="{% url 'expenses_mate:share_expense_group' expense_card.group_id %}">
-                      {% csrf_token %}
-                      <div class="form-group">
-                        <label for="users" class="block text-sm font-medium text-gray-700">ユーザーを選択</label>
-                        <select name="shared_with" id="users" multiple
-                          class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300 focus:border-blue-500">
-                          {% for user in all_users %}
-                          <option value="{{ user.id }}">{{ user.username }}</option>
-                          {% endfor %}
-                        </select>
-                      </div>
-                      <div class="flex justify-end mt-6">
-                        <button type="button" @click="open = false"
-                          class="bg-gray-300 text-gray-700 px-4 py-2 rounded mr-2">閉じる</button>
-                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">共有</button>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
+          <div class="dropdown">
+            <div tabindex="0" role="button" class="btn m-1 three-dots">
+              <i class="fas fa-ellipsis-v"></i>
             </div>
+            <ul tabindex="0"
+              class="dropdown-content menu bg-base-100 rounded-box z-[1] w-36 p-2 shadow custom-dropdown">
+              <li>
+                <a>
+                  <div class="edit-icon"><i class="fas fa-edit mr-1"></i> 編集</div>
+                </a>
+              </li>
+              <hr />
+              <li>
+                <form method="post" action="{% url 'expenses_mate:expenses_list_create' %}">
+                  {% csrf_token %}
+                  <input type="hidden" name="delete_id" value="{{ expense_card.group_id }}">
+                  <button type="submit" class="delete-icon"><i class="fas fa-trash-alt mr-1"></i> 削除</button>
+                </form>
+              </li>
+              <hr />
+              <li>
+                <a onclick="document.getElementById('shared_modal_{{ expense_card.group_id }}').showModal()">
+                  <div class="share-icon"><i class="fas fa-share"></i> 共有</div>
+                </a>
+              </li>
+            </ul>
           </div>
+          <dialog id="shared_modal_{{ expense_card.group_id }}" class="modal">
+            <div class="modal-box">
+              <form method="dialog">
+                <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+              </form>
+              <h3 class="text-lg font-semibold mb-3">共有するユーザーを選択</h3>
+              <form method="POST" action="{% url 'expenses_mate:share_expense_group' expense_card.group_id %}">
+                {% csrf_token %}
+                <input type="hidden" name="title" id="title" value="{{ expense_card.title }}">
+                <div>
+                  <label for="users" class="block text-sm font-medium text-gray-700">ユーザーを選択</label>
+                  <div class="mt-2">
+                    {% for user in all_users %}
+                    <div class="flex items-center mb-2">
+                      <!-- Checkbox input for each user -->
+                      <input type="checkbox" name="shared_with" value="{{ user.user_id }}" id="user_{{ user.user_id }}"
+                        {% if user in expense_card.shared_with.all %}checked{% endif %}
+                        class="checkbox checkbox-lg border-[#EAECC6] [--chkbg:#2BC0E4] [--chkfg:#EAECC6] checked:border-[#2BC0E4]">
+
+                      <!-- Label for the checkbox -->
+                      <label for="user_{{ user.user_id }}" class="ml-2 text-sm text-gray-700">
+                        {{ user.username }}
+                      </label>
+                    </div>
+                    {% endfor %}
+                  </div>
+                </div>
+                <div class="flex justify-end mt-6">
+                  <form method="dialog">
+                    <button class="btn bg-gray-300 text-gray-700 px-4 py-2 rounded mr-2 btn-ghost">閉じる</button>
+                  </form>
+                  <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">共有</button>
+                </div>
+              </form>
+            </div>
+          </dialog>
         </div>
       </div>
 
-      <div class="flex justify-between items-end mt-5">
+      <div class="flex justify-between items-end">
         <div>
           <div class="info">
             <span class="info-title">作成者：</span>
@@ -97,7 +104,12 @@
           </div>
           <div class="info">
             <span class="info-title">共有ユーザー：</span>
-            <span class="info-value">{{ expense_card.shared_with.all|join:", " }}</span>
+            <!-- <span class="info-value">{{ expense_card.shared_with.all|join:", " }}</span> -->
+            <span class="info-value">
+              {% for user in expense_card.shared_with.all %}
+              {{ user.username }}{% if not forloop.last %}, {% endif %}
+              {% endfor %}
+            </span>
           </div>
           <div class="info">
             <span class="info-title">作成日：</span>
@@ -119,6 +131,15 @@
   </div>
 
 </div>
+
+<script>
+  $(document).ready(function () {
+    $('#users').select2({
+      placeholder: 'Select users',
+      allowClear: true
+    });
+  });
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/alpinejs" defer></script>
 

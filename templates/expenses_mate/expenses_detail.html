@@ -82,23 +82,30 @@
                         <td>{{ expense.item_name }}</td>
                         <td>{{ expense.amount|floatformat:2|intcomma }}</td>
                         <td>
-                            <div class="dropdown-container" tabindex="-1">
-                                <div class="three-dots"></div>
-                                <div class="dropdown">
-                                    <form method="post" action="{% url 'expenses_mate:expense_detail' expenses_group.group_id %}">
+                            <div class="dropdown">
+                                <div tabindex="0" role="button" class="btn m-1 three-dots">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </div>
+                                <ul tabindex="0"
+                                    class="dropdown-content menu bg-base-100 rounded-box z-[1] w-36 p-2 shadow custom-dropdown">
+                                    <form method="post"
+                                        action="{% url 'expenses_mate:expense_detail' expenses_group.group_id %}">
                                         {% csrf_token %}
-                                        <input type="hidden" name="expense_id" value="{{ expense.expense_id }}">
+                                    <li>
                                         <button type="submit" name="delete" class="delete-icon">
                                             <i class="fas fa-trash-alt mr-1"></i>
                                             <span class="hidden md:inline">削除</span>
                                         </button>
-                                        <hr />
+                                    </li>
+                                    <hr />
+                                    <li>
                                         <button type="submit" class="edit-icon">
                                             <i class="fas fa-edit mr-1"></i>
                                             <span class="hidden md:inline">編集</span>
                                         </button>
+                                    </li>
                                     </form>
-                                </div>
+                                </ul>
                             </div>
                         </td>
                     </tr>
@@ -113,23 +120,30 @@
                         <div class="expenses-table-icon" style="text-align: left;">
                             <i class="fas fa-user-circle"></i>
                         </div>
-                        <div class="dropdown-container" tabindex="-1">
-                            <div class="three-dots"></div>
-                            <div class="dropdown">
-                                <form method="post" action="{% url 'expenses_mate:expense_detail' expenses_group.group_id %}">
+                        <div class="dropdown">
+                            <div tabindex="0" role="button" class="btn m-1 three-dots">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </div>
+                            <ul tabindex="0"
+                                class="dropdown-content menu bg-base-100 rounded-box z-[1] w-36 p-2 shadow custom-dropdown">
+                                <form method="post"
+                                    action="{% url 'expenses_mate:expense_detail' expenses_group.group_id %}">
                                     {% csrf_token %}
-                                    <input type="hidden" name="expense_id" value="{{ expense.expense_id }}">
+                                <li>
                                     <button type="submit" name="delete" class="delete-icon">
                                         <i class="fas fa-trash-alt mr-1"></i>
                                         <span class="hidden md:inline">削除</span>
                                     </button>
-                                    <hr />
+                                </li>
+                                <hr />
+                                <li>
                                     <button type="submit" class="edit-icon">
                                         <i class="fas fa-edit mr-1"></i>
                                         <span class="hidden md:inline">編集</span>
                                     </button>
+                                </li>
                                 </form>
-                            </div>
+                            </ul>
                         </div>
                     </div>
                     <h3 class="text-darkmagenta text-xl font-semibold">{{ expense.user_id }}</h3>
@@ -164,16 +178,16 @@
         </div>
         <div class="container mx-auto p-4 lg:p-8 my-4 w-full">
             <h2 class="text-2xl font-semibold text-center expenses-user-info-title my-4">ユーザーごとの合計金額</h2>
-            <div class="max-w-lg mx-auto mt-5 p-4 border border-gray-200 rounded-lg shadow-md bg-white"> 
-                {% for user_total in user_totals %} 
-                <div class="flex justify-between py-2 border-b border-gray-200"> 
+            <div class="max-w-lg mx-auto mt-5 p-4 border border-gray-200 rounded-lg shadow-md bg-white">
+                {% for user_total in user_totals %}
+                <div class="flex justify-between py-2 border-b border-gray-200">
                     <span class="text-lg font-bold text-gray-800">
                         {{ user_total.user_id__username }}：
-                    </span> 
+                    </span>
                     <span class="text-lg font-bold text-blue-600">
                         {{ user_total.total_amount }}
-                    </span> 
-                </div> 
+                    </span>
+                </div>
                 {% endfor %}
             </div>
         </div>
