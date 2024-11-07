@@ -119,7 +119,7 @@ class ExpenseManageView(LoginRequiredMixin, FormView, ListView):
     def get_queryset(self):
         group_id = self.kwargs['group_id']
         return Expense.objects.filter(group_id=group_id)
-    
+
     def get_form(self):
         form = super().get_form()
         form.instance.user_id = self.request.user
@@ -135,6 +135,7 @@ class ExpenseManageView(LoginRequiredMixin, FormView, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         group_id = self.kwargs['group_id']
+        context['expenses'] = self.get_queryset()  # Set for ListView
         context['expenses_group'] = get_object_or_404(ExpenseGroup, group_id=group_id)
         context['user_totals'] = (
             Expense.objects.filter(group_id=group_id)
@@ -142,10 +143,10 @@ class ExpenseManageView(LoginRequiredMixin, FormView, ListView):
                 .annotate(total_amount=Sum('amount'))
                 .order_by('user_id__username')
         )
+        context['form'] = self.get_form()  # Add form for FormView
         return context
-    
+
     def post(self, request, *args, **kwargs):
-        
         if 'expense_id' in request.POST:
             expense = get_object_or_404(Expense, expense_id=request.POST['expense_id'])
             if 'delete' in request.POST:

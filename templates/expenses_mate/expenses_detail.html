@@ -61,7 +61,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
         <div class="mx-auto p-1 md:p-4 col-span-1 md:col-span-2 lg:col-span-3 mb-4 w-full overflow-visible">
             <h2 class="my-3 expenses-table-title mx-3">支出</h2>
-            <table class="expenses-table hidden md:table">
+            <table class="expenses-table hidden md:table relative">
                 <thead>
                     <tr>
                         <th></th>
@@ -82,15 +82,16 @@
                         <td>{{ expense.item_name }}</td>
                         <td>{{ expense.amount|floatformat:2|intcomma }}</td>
                         <td>
-                            <div class="dropdown">
+                            <div class="dropdown relative">
                                 <div tabindex="0" role="button" class="btn m-1 three-dots">
                                     <i class="fas fa-ellipsis-v"></i>
                                 </div>
                                 <ul tabindex="0"
-                                    class="dropdown-content menu bg-base-100 rounded-box z-[1] w-36 p-2 shadow custom-dropdown">
+                                    class="dropdown-content menu bg-base-100 rounded-box z-50 absolute w-36 p-2 shadow custom-dropdown">
                                     <form method="post"
                                         action="{% url 'expenses_mate:expense_detail' expenses_group.group_id %}">
                                         {% csrf_token %}
+                                        <input type="hidden" name="expense_id" value="{{ expense.expense_id }}">
                                     <li>
                                         <button type="submit" name="delete" class="delete-icon">
                                             <i class="fas fa-trash-alt mr-1"></i>
@@ -120,34 +121,35 @@
                         <div class="expenses-table-icon" style="text-align: left;">
                             <i class="fas fa-user-circle"></i>
                         </div>
-                        <div class="dropdown">
+                        <div class="dropdown dropdown-bottom dropdown-end relative">
                             <div tabindex="0" role="button" class="btn m-1 three-dots">
                                 <i class="fas fa-ellipsis-v"></i>
                             </div>
                             <ul tabindex="0"
-                                class="dropdown-content menu bg-base-100 rounded-box z-[1] w-36 p-2 shadow custom-dropdown">
+                                class="dropdown-content menu bg-base-100 rounded-box z-50 absolute w-36 p-2 shadow custom-dropdown">
                                 <form method="post"
                                     action="{% url 'expenses_mate:expense_detail' expenses_group.group_id %}">
                                     {% csrf_token %}
                                 <li>
+                                    <input type="hidden" name="expense_id" value="{{ expense.expense_id }}">
                                     <button type="submit" name="delete" class="delete-icon">
                                         <i class="fas fa-trash-alt mr-1"></i>
-                                        <span class="hidden md:inline">削除</span>
+                                        <span>削除</span>
                                     </button>
                                 </li>
                                 <hr />
                                 <li>
                                     <button type="submit" class="edit-icon">
                                         <i class="fas fa-edit mr-1"></i>
-                                        <span class="hidden md:inline">編集</span>
+                                        <span>編集</span>
                                     </button>
                                 </li>
                                 </form>
                             </ul>
                         </div>
                     </div>
-                    <h3 class="text-darkmagenta text-xl font-semibold">{{ expense.user_id }}</h3>
-                    <p class="leading-6">アイテム名: <span class="font-bold">{{ expense.item_name }}</span></p>
+                    <h3 class="text-darkmagenta text-xl font-semibold mt-3">{{ expense.user_id }}</h3>
+                    <p class="leading-6 my-3">アイテム名: <span class="font-bold">{{ expense.item_name }}</span></p>
                     <p class="leading-6">金額: <span class="font-bold">{{ expense.amount|floatformat:2|intcomma }}</span>
                     </p>
                 </div>

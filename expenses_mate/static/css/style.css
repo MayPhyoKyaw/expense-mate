@@ -566,7 +566,7 @@ h1.header {
   width: 100%;
   border-collapse: collapse;
   border-radius: 5px;
-  overflow: hidden;
+  border: none;
 }
 
 .expenses-table th {
@@ -643,6 +643,7 @@ h1.header {
   background-color: #d2e6cb;
   box-shadow: 0px 0px 3px 3px #d2e6cb;
   outline: none;
+  z-index: 10;
 }
 /* Three dot menu end */
 
