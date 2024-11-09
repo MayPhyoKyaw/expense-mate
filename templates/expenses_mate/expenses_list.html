@@ -33,7 +33,7 @@
             <ul tabindex="0"
               class="dropdown-content menu bg-base-100 rounded-box z-[1] w-36 p-2 shadow custom-dropdown">
               <li>
-                <a>
+                <a onclick="document.getElementById('edit_modal_{{ expense_card.group_id }}').showModal()">
                   <div class="edit-icon"><i class="fas fa-edit mr-1"></i> 編集</div>
                 </a>
               </li>
@@ -87,6 +87,30 @@
                   <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">共有</button>
                 </div>
               </form>
+            </div>
+          </dialog>
+          <dialog id="edit_modal_{{ expense_card.group_id }}" class="modal">
+            <div class="modal-box">
+                <form method="dialog">
+                    <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                </form>
+                <h3 class="text-lg font-semibold mb-3">費用を編集</h3>
+                <form method="POST" action="{% url 'expenses_mate:update_expense_group' expense_card.group_id %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="group_id" value="{{ expense_card.group_id }}">
+                    
+                    <div>
+                        <label for="title" class="block text-sm font-medium text-gray-700">タイトル</label>
+                        <div class="mt-2">
+                            <input type="text" id="title" name="title" value="{{ expense_card.title }}" class="input input-bordered w-full">
+                        </div>
+                    </div>
+        
+                    <div class="flex justify-end mt-6">
+                        <button class="btn bg-gray-300 text-gray-700 px-4 py-2 rounded mr-2 btn-ghost">閉じる</button>
+                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">編集</button>
+                    </div>
+                </form>
             </div>
           </dialog>
         </div>

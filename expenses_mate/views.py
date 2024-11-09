@@ -1,5 +1,5 @@
 from django.db import models # type: ignore
-from django.views.generic import View, ListView, FormView # type: ignore
+from django.views.generic import View, ListView, FormView, UpdateView# type: ignore
 from django.shortcuts import render, redirect # type: ignore
 from django.urls import reverse_lazy # type: ignore
 from django.db.models import Sum # type: ignore
@@ -8,7 +8,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin # type: ignore
 from .forms import ExpenseGroupForm, ExpenseForm # type: ignore
 from django.db.models import Q # type: ignore
 from django.shortcuts import get_object_or_404 # type: ignore
-from django.contrib import messages # type: ignore
 
 class ExpenseGroupListCreateView(LoginRequiredMixin, View):
     template_name = 'expenses_mate/expenses_list.html'
@@ -168,7 +167,7 @@ class ExpenseManageView(LoginRequiredMixin, FormView, ListView):
         return redirect(self.get_success_url())
     
 
-class ShareExpenseGroupView(View):
+class ShareExpenseGroupView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         expense_group = get_object_or_404(ExpenseGroup, group_id=kwargs['group_id'])
         
@@ -186,3 +185,38 @@ class ShareExpenseGroupView(View):
                 'expense_group': expense_group,
                 'expenses': expenses
             })
+            
+
+class UpdateExpenseGroupView(LoginRequiredMixin, UpdateView):
+    model = ExpenseGroup
+    fields = ['title']
+
+    def post(self, request, *args, **kwargs):
+        expense_group = get_object_or_404(ExpenseGroup, group_id=kwargs['group_id'])
+
+        expense_group.title = request.POST.get("title")
+        expense_group.created_by = request.user
+
+        # shared_with_ids = request.POST.getlist("shared_with")
+        # expense_group.shared_with.set(shared_with_ids)
+
+        expense_group.save()
+
+        return redirect(reverse_lazy('expenses_mate:expenses_list_create'))
+
+
+class UpdateExpenseView(LoginRequiredMixin, UpdateView):
+    model = Expense
+    fields = ['item_name', 'amount']
+
+    def post(self, request, *args, **kwargs):
+        expense = get_object_or_404(Expense, expense_id=kwargs['expense_id'])
+
+        group_id = request.POST.get("group_id")
+        expense.item_name = request.POST.get("item_name")
+        expense.amount = request.POST.get("amount")
+
+        expense.save()
+
+        return redirect(reverse_lazy('expenses_mate:expense_detail', kwargs={'group_id': group_id}))
+    

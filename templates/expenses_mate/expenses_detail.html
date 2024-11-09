@@ -5,20 +5,6 @@
 {% block contents %}
 
 <div class="container mx-auto p-4">
-    <!-- <div class="expenses-title">
-        <div class="flex items-center justify-between">
-            <div class="flex-none w-32">
-                <button class="back-to-home">戻す</button>
-            </div>
-            <div class="flex-1 text-center">
-                <h2>{{ expenses_group.title }}</h2>
-            </div>
-        </div>
-    </div> -->
-    <!-- <div class="expenses-title relative">
-        <button class="back-to-home absolute left-0">戻す</button>
-        <h2 class="text-center">{{ expenses_group.title }}</h2>
-    </div> -->
     <div class="expenses-title">
         <h2 class="flex-1 text-center">{{ expenses_group.title }}</h2>
     </div>
@@ -92,24 +78,58 @@
                                         action="{% url 'expenses_mate:expense_detail' expenses_group.group_id %}">
                                         {% csrf_token %}
                                         <input type="hidden" name="expense_id" value="{{ expense.expense_id }}">
+                                        <li>
+                                            <button type="submit" name="delete" class="delete-icon">
+                                                <i class="fas fa-trash-alt mr-1"></i>
+                                                <span class="hidden md:inline">削除</span>
+                                            </button>
+                                        </li>
+                                        <hr />
+                                    </form>
                                     <li>
-                                        <button type="submit" name="delete" class="delete-icon">
-                                            <i class="fas fa-trash-alt mr-1"></i>
-                                            <span class="hidden md:inline">削除</span>
-                                        </button>
-                                    </li>
-                                    <hr />
-                                    <li>
-                                        <button type="submit" class="edit-icon">
+                                        <button class="edit-icon"
+                                            onclick="document.getElementById('edit_modal_{{ expense.expense_id }}').showModal()">
                                             <i class="fas fa-edit mr-1"></i>
                                             <span class="hidden md:inline">編集</span>
                                         </button>
                                     </li>
-                                    </form>
                                 </ul>
                             </div>
                         </td>
                     </tr>
+                    <dialog id="edit_modal_{{ expense.expense_id }}" class="modal">
+                        <div class="modal-box">
+                            <form method="dialog">
+                                <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                            </form>
+                            <h3 class="text-lg font-semibold mb-3">費用を編集</h3>
+                            <form method="POST" action="{% url 'expenses_mate:update_expense' expense.expense_id %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="group_id" value="{{ expenses_group.group_id }}">
+    
+                                <div>
+                                    <label for="item_name" class="block text-sm font-medium text-gray-700">アイテム名</label>
+                                    <div class="mt-2">
+                                        <input type="text" id="item_name" name="item_name" value="{{ expense.item_name }}"
+                                            class="input input-bordered w-full">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="amount" class="block text-sm font-medium text-gray-700">金額</label>
+                                    <div class="mt-2">
+                                        <input type="text" id="amount" name="amount" value="{{ expense.amount }}"
+                                            class="input input-bordered w-full">
+                                    </div>
+                                </div>
+    
+                                <div class="flex justify-end mt-6">
+                                    <button
+                                        class="btn bg-gray-300 text-gray-700 px-4 py-2 rounded mr-2 btn-ghost">閉じる</button>
+                                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">編集</button>
+                                </div>
+                            </form>
+                        </div>
+                    </dialog>
                     {% endfor %}
                 </tbody>
             </table>
@@ -130,21 +150,22 @@
                                 <form method="post"
                                     action="{% url 'expenses_mate:expense_detail' expenses_group.group_id %}">
                                     {% csrf_token %}
+                                    <li>
+                                        <input type="hidden" name="expense_id" value="{{ expense.expense_id }}">
+                                        <button type="submit" name="delete" class="delete-icon">
+                                            <i class="fas fa-trash-alt mr-1"></i>
+                                            <span>削除</span>
+                                        </button>
+                                    </li>
+                                    <hr />
+                                </form>
                                 <li>
-                                    <input type="hidden" name="expense_id" value="{{ expense.expense_id }}">
-                                    <button type="submit" name="delete" class="delete-icon">
-                                        <i class="fas fa-trash-alt mr-1"></i>
-                                        <span>削除</span>
-                                    </button>
-                                </li>
-                                <hr />
-                                <li>
-                                    <button type="submit" class="edit-icon">
+                                    <button class="edit-icon"
+                                        onclick="document.getElementById('shared_modal_{{ expense.expense_id }}').showModal()">
                                         <i class="fas fa-edit mr-1"></i>
                                         <span>編集</span>
                                     </button>
                                 </li>
-                                </form>
                             </ul>
                         </div>
                     </div>
@@ -152,31 +173,42 @@
                     <p class="leading-6 my-3">アイテム名: <span class="font-bold">{{ expense.item_name }}</span></p>
                     <p class="leading-6">金額: <span class="font-bold">{{ expense.amount|floatformat:2|intcomma }}</span>
                     </p>
+                    <dialog id="edit_modal_{{ expense.expense_id }}" class="modal">
+                        <div class="modal-box">
+                            <form method="dialog">
+                                <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                            </form>
+                            <h3 class="text-lg font-semibold mb-3">費用を編集</h3>
+                            <form method="POST" action="{% url 'expenses_mate:update_expense' expense.expense_id %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="group_id" value="{{ expenses_group.group_id }}">
+    
+                                <div>
+                                    <label for="item_name" class="block text-sm font-medium text-gray-700">アイテム名</label>
+                                    <div class="mt-2">
+                                        <input type="text" id="item_name" name="item_name" value="{{ expense.item_name }}"
+                                            class="input input-bordered w-full">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="amount" class="block text-sm font-medium text-gray-700">金額</label>
+                                    <div class="mt-2">
+                                        <input type="text" id="amount" name="amount" value="{{ expense.amount }}"
+                                            class="input input-bordered w-full">
+                                    </div>
+                                </div>
+    
+                                <div class="flex justify-end mt-6">
+                                    <button
+                                        class="btn bg-gray-300 text-gray-700 px-4 py-2 rounded mr-2 btn-ghost">閉じる</button>
+                                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">編集</button>
+                                </div>
+                            </form>
+                        </div>
+                    </dialog>
                 </div>
                 {% endfor %}
             </div>
-            <!-- <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3">
-                {% for expense in expenses %}
-                <div class="border p-4"> {{ expense.user_id }} </div>
-                <div class="border p-4">
-                    {{ expense.item_name }}
-                </div>
-                <div class="border p-4">
-                    {{ expense.amount|floatformat:2|intcomma }}
-                </div>
-                <!-<div class="border p-4">
-                    {% if expense.transaction_type == 'add' %}
-                    <span class="text-green-500">+{{ expense.amount|floatformat:2|intcomma }}</span>
-                    {% elif expense.transaction_type == 'subtract'%}
-                    <span class="text-red-500">-{{ expense.amount|floatformat:2|intcomma }}</span>
-                    {% elif expense.transaction_type == 'multiply' %}
-                    <span class="text-blue-500">&times;{{ expense.amount|floatformat:2|intcomma }}</span>
-                    {% elif expense.transaction_type == 'divide' %}
-                    <span class="text-yellow-500">÷{{ expense.amount|floatformat:2|intcomma }}</span>
-                    {% endif %}
-                </div> --
-                {% endfor %}
-            </div> -->
         </div>
         <div class="container mx-auto p-4 lg:p-8 my-4 w-full">
             <h2 class="text-2xl font-semibold text-center expenses-user-info-title my-4">ユーザーごとの合計金額</h2>
