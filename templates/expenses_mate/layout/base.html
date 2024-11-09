@@ -35,7 +35,8 @@
         <!-- Profile and Logout icons -->
         <div class="flex items-center space-x-4">
           <!-- User profile icon with text hidden on small screens -->
-          <a href="#" class="inline-flex items-center px-5 pt-1 text-2xl text-black-500 md:text-sm font-medium hover:text-gray-700">
+          <a href="#"
+            class="inline-flex items-center px-5 pt-1 text-2xl text-black-500 md:text-sm font-medium hover:text-gray-700">
             <i class="fa fa-user"></i>
             <span class="hidden md:inline ml-2">{{ user.username }}</span>
           </a>
@@ -51,11 +52,21 @@
     </div>
   </nav>
 
-  <div class="relative">
+  <div>
     {% if request.path != '/' %}
-    <a href="{% url 'expenses_mate:expenses_list_create' %}">
-      <button class="back-to-home absolute left-10 top-7 lg:left-28">戻す</button>
-    </a>
+    <!-- <a href="{% url 'expenses_mate:expenses_list_create' %}"> -->
+      <!-- <button class="back-to-home absolute left-10 top-7 lg:left-28">戻す</button> -->
+      <!-- <button class="back-to-home ml-5 mt-5 md:ml-36 md:mt-5">
+        <i class="fas fa-home"></i>
+        戻す
+      </button> -->
+      <button class="back-to-home ml-5 mt-5 md:ml-36 md:mt-5">
+        <a href="{% url 'expenses_mate:expenses_list_create' %}"> 
+          <i class="fas fa-home mr-2"></i>
+          戻す
+        </a>
+      </button>
+    <!-- </a> -->
     {% endif %}
   </div>
   <div class="header-block flex items-center justify-center text-center">
